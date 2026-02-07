@@ -36,10 +36,10 @@ const Sheets = {
   async pullFromSheets() {
     const result = await this._request('getAll');
 
-    if (result.exercises) {
+    if (result.exercises && result.exercises.length > 0) {
       Storage.importExercises(result.exercises);
     }
-    if (result.workoutLog) {
+    if (result.workoutLog && result.workoutLog.length > 0) {
       Storage.importWorkoutLog(result.workoutLog);
     }
     if (result.locations && result.locations.length > 0) {
@@ -82,11 +82,21 @@ const Sheets = {
     }
   },
 
-  // ─── Initial load: always pull from Sheets ───────────────────
+  // ─── Initial load: push pending changes first, then pull ────
   async initialLoad() {
     if (!this.isConfigured()) return false;
 
     try {
+      // If there are unpushed local changes, push before pulling
+      // so the pull doesn't overwrite them
+      if (Storage.getSyncQueue().length > 0) {
+        try {
+          await this.pushToSheets();
+        } catch (err) {
+          console.warn('Initial push failed, preserving local data:', err.message);
+          return false;
+        }
+      }
       await this.pullFromSheets();
       return true;
     } catch (err) {

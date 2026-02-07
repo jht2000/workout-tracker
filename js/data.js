@@ -1,5 +1,5 @@
 // ─── App Version ─────────────────────────────────────────────────
-const APP_VERSION = '1.2.1';
+const APP_VERSION = '1.2.2';
 
 // ─── Muscle Groups ───────────────────────────────────────────────
 const MUSCLE_GROUPS = [
