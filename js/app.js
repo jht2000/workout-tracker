@@ -447,7 +447,7 @@ const App = {
     }
 
     // Background sync
-    Sheets.sync().catch(() => {});
+    Sheets.backgroundPush();
 
     if (andLog && exercise) {
       this.currentExerciseId = exercise.id;
@@ -464,7 +464,7 @@ const App = {
     if (!confirm('Delete this exercise? This cannot be undone.')) return;
     Storage.deleteExercise(id);
     this.toast('Exercise deleted', 'success');
-    Sheets.sync().catch(() => {});
+    Sheets.backgroundPush();
     // Go back twice (past detail screen)
     this.screenStack.pop();
     this.goBack();
@@ -500,7 +500,7 @@ const App = {
       clearTimeout(notesTimer);
       notesTimer = setTimeout(() => {
         Storage.updateExercise(this.currentExerciseId, { notes: newNotes.value.trim() });
-        Sheets.sync().catch(() => {});
+        Sheets.backgroundPush();
         this.toast('Notes saved', 'success');
       }, 800);
     });
@@ -559,7 +559,7 @@ const App = {
         Storage.deleteSet(btn.dataset.id);
         this.renderTodaySets();
         this.toast('Set removed');
-        Sheets.sync().catch(() => {});
+        Sheets.backgroundPush();
       });
     });
   },
@@ -631,7 +631,7 @@ const App = {
     this.renderTodaySets();
 
     // Background sync
-    Sheets.sync().catch(() => {});
+    Sheets.backgroundPush();
   },
 
   // ─── EXERCISE FULL HISTORY ───────────────────────────────────
