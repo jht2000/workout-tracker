@@ -447,8 +447,8 @@ const App = {
       this.toast('Exercise added', 'success');
     }
 
-    // Background sync
-    Sheets.backgroundPush();
+    // Sync just this exercise
+    Sheets.pushExercise(exercise);
 
     if (andLog && exercise) {
       this.currentExerciseId = exercise.id;
@@ -465,7 +465,7 @@ const App = {
     if (!confirm('Delete this exercise? This cannot be undone.')) return;
     Storage.deleteExercise(id);
     this.toast('Exercise deleted', 'success');
-    Sheets.backgroundPush();
+    Sheets.removeExercise(id);
     // Go back twice (past detail screen)
     this.screenStack.pop();
     this.goBack();
@@ -501,7 +501,8 @@ const App = {
       clearTimeout(notesTimer);
       notesTimer = setTimeout(() => {
         Storage.updateExercise(this.currentExerciseId, { notes: newNotes.value.trim() });
-        Sheets.backgroundPush();
+        const updatedEx = Storage.getExerciseById(this.currentExerciseId);
+        Sheets.pushExercise(updatedEx);
         this.toast('Notes saved', 'success');
       }, 800);
     });
@@ -557,10 +558,11 @@ const App = {
     container.querySelectorAll('.set-delete').forEach(btn => {
       btn.addEventListener('click', (e) => {
         e.stopPropagation();
-        Storage.deleteSet(btn.dataset.id);
+        const setId = btn.dataset.id;
+        Storage.deleteSet(setId);
         this.renderTodaySets();
         this.toast('Set removed');
-        Sheets.backgroundPush();
+        Sheets.removeSet(setId);
       });
     });
   },
@@ -615,7 +617,7 @@ const App = {
     const todaySets = Storage.getHistoryForExercise(this.currentExerciseId)
       .filter(e => toDateCST(e.timestamp) === today);
 
-    Storage.logSet({
+    const entry = Storage.logSet({
       exerciseId: this.currentExerciseId,
       exerciseName: ex ? ex.name : '',
       dayNumber: Storage.getActiveDay() || 0,
@@ -631,8 +633,8 @@ const App = {
 
     this.renderTodaySets();
 
-    // Background sync
-    Sheets.backgroundPush();
+    // Sync just this entry
+    Sheets.pushLogEntry(entry);
   },
 
   // ─── EXERCISE FULL HISTORY ───────────────────────────────────

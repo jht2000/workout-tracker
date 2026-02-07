@@ -111,8 +111,58 @@ const Sheets = {
     }
   },
 
-  // ─── Background push after a local change ────────────────────
-  // Keeps Sheets up to date without overwriting local
+  // ─── Targeted push: single exercise ─────────────────────────
+  async pushExercise(exercise) {
+    if (!this.isConfigured()) return;
+    const locs = exercise.locations || (exercise.location ? [exercise.location] : []);
+    const data = { ...exercise, locations: locs, location: locs.join('|') };
+    console.log('[Sheets] pushExercise:', { name: exercise.name, locations: locs });
+    try {
+      const result = await this._request('updateExercise', { data });
+      console.log('[Sheets] pushExercise: success', result.action || '');
+    } catch (err) {
+      console.warn('[Sheets] pushExercise: FAILED', err.message);
+    }
+  },
+
+  // ─── Targeted push: single log entry ──────────────────────
+  async pushLogEntry(entry) {
+    if (!this.isConfigured()) return;
+    console.log('[Sheets] pushLogEntry:', { exerciseName: entry.exerciseName, set: entry.setNumber });
+    try {
+      await this._request('logSet', { data: entry });
+      console.log('[Sheets] pushLogEntry: success');
+    } catch (err) {
+      console.warn('[Sheets] pushLogEntry: FAILED', err.message);
+    }
+  },
+
+  // ─── Targeted delete: single exercise ─────────────────────
+  async removeExercise(id) {
+    if (!this.isConfigured()) return;
+    console.log('[Sheets] removeExercise:', id);
+    try {
+      await this._request('deleteExercise', { data: { id } });
+      console.log('[Sheets] removeExercise: success');
+    } catch (err) {
+      console.warn('[Sheets] removeExercise: FAILED', err.message);
+    }
+  },
+
+  // ─── Targeted delete: single set ──────────────────────────
+  async removeSet(id) {
+    if (!this.isConfigured()) return;
+    console.log('[Sheets] removeSet:', id);
+    try {
+      await this._request('deleteSet', { data: { id } });
+      console.log('[Sheets] removeSet: success');
+    } catch (err) {
+      console.warn('[Sheets] removeSet: FAILED', err.message);
+    }
+  },
+
+  // ─── Background push after a local change (full replace) ──
+  // Only used for full sync from Settings buttons
   async backgroundPush() {
     if (!this.isConfigured()) {
       console.log('[Sheets] backgroundPush: skipped (not configured)');

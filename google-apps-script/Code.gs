@@ -49,8 +49,17 @@ function doPost(e) {
       case 'addExercise':
         result = handleAddExercise(payload.data);
         break;
+      case 'updateExercise':
+        result = handleUpdateExercise(payload.data);
+        break;
+      case 'deleteExercise':
+        result = handleDeleteExercise(payload.data);
+        break;
       case 'logSet':
         result = handleLogSet(payload.data);
+        break;
+      case 'deleteSet':
+        result = handleDeleteSet(payload.data);
         break;
       default:
         result = { error: 'Unknown action: ' + action };
@@ -202,5 +211,62 @@ function handleLogSet(data) {
     data.timestamp || '',
     data.timestamp ? data.timestamp.slice(0, 10) : ''
   ]);
+  return { status: 'ok' };
+}
+
+// ─── Update single exercise (upsert by ID) ──────────────────
+
+function handleUpdateExercise(data) {
+  const sheet = getOrCreateSheet('Exercises', EXERCISE_HEADERS);
+  const values = sheet.getDataRange().getValues();
+  const locs = data.locations || (data.location ? String(data.location).split('|').filter(Boolean) : []);
+  const rowData = [
+    data.id || '',
+    data.name || '',
+    (data.primaryMuscles || []).join('|'),
+    (data.secondaryMuscles || []).join('|'),
+    locs.join('|'),
+    data.notes || '',
+    data.createdAt || ''
+  ];
+
+  // Find existing row by ID (skip header row)
+  for (var i = 1; i < values.length; i++) {
+    if (String(values[i][0]) === String(data.id)) {
+      sheet.getRange(i + 1, 1, 1, rowData.length).setValues([rowData]);
+      return { status: 'ok', action: 'updated' };
+    }
+  }
+
+  // Not found — append as new row
+  sheet.appendRow(rowData);
+  return { status: 'ok', action: 'added' };
+}
+
+// ─── Delete single exercise by ID ───────────────────────────
+
+function handleDeleteExercise(data) {
+  const sheet = getOrCreateSheet('Exercises', EXERCISE_HEADERS);
+  const values = sheet.getDataRange().getValues();
+  for (var i = 1; i < values.length; i++) {
+    if (String(values[i][0]) === String(data.id)) {
+      sheet.deleteRow(i + 1);
+      return { status: 'ok' };
+    }
+  }
+  return { status: 'ok' };
+}
+
+// ─── Delete single set by ID ────────────────────────────────
+
+function handleDeleteSet(data) {
+  const sheet = getOrCreateSheet('WorkoutLog', LOG_HEADERS);
+  const values = sheet.getDataRange().getValues();
+  for (var i = 1; i < values.length; i++) {
+    if (String(values[i][0]) === String(data.id)) {
+      sheet.deleteRow(i + 1);
+      return { status: 'ok' };
+    }
+  }
   return { status: 'ok' };
 }
