@@ -436,6 +436,7 @@ const App = {
     const notes = document.getElementById('exercise-notes').value.trim();
 
     const data = { name, primaryMuscles, secondaryMuscles, locations, notes };
+    console.log('[App] saveExercise:', { id: id || '(new)', name, locations });
 
     let exercise;
     if (id) {
@@ -915,7 +916,32 @@ document.addEventListener('DOMContentLoaded', () => {
     App.showScreen('home');
   });
 
+  // Logs modal
+  document.getElementById('btn-view-logs').addEventListener('click', () => {
+    document.getElementById('logs-output').textContent = Logger.getText();
+    document.getElementById('logs-modal').classList.remove('hidden');
+  });
+  document.getElementById('btn-close-logs').addEventListener('click', () => {
+    document.getElementById('logs-modal').classList.add('hidden');
+  });
+  document.getElementById('btn-copy-logs').addEventListener('click', () => {
+    navigator.clipboard.writeText(Logger.getText()).then(() => {
+      App.toast('Logs copied', 'success');
+    }).catch(() => {
+      // Fallback: select text in the pre element
+      const range = document.createRange();
+      range.selectNodeContents(document.getElementById('logs-output'));
+      window.getSelection().removeAllRanges();
+      window.getSelection().addRange(range);
+      App.toast('Logs selected — tap Copy', 'success');
+    });
+  });
+
   // ─── Init ────────────────────────────────────────────────────
+  console.log(`[App] Workout Tracker v${APP_VERSION} loaded`);
+  console.log(`[App] Sheets configured: ${Sheets.isConfigured()}`);
+  console.log(`[App] Local exercises: ${Storage.getExercises().length}, log entries: ${Storage.getWorkoutLog().length}`);
+  console.log(`[App] Sync queue: ${Storage.getSyncQueue().length} items`);
   App.renderHome();
 
   // Try initial sheets sync in background

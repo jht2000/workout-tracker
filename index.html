@@ -182,10 +182,28 @@
         <input type="file" id="import-file" accept=".json" class="hidden">
         <button id="btn-clear-data" class="btn btn-danger full-width">Clear All Local Data</button>
       </div>
+      <div class="settings-debug">
+        <h3>Debug</h3>
+        <button id="btn-view-logs" class="btn btn-outline full-width">View Session Logs</button>
+      </div>
       <div class="settings-version">
         <span id="app-version"></span>
       </div>
     </section>
+
+    <!-- Logs Modal -->
+    <div id="logs-modal" class="logs-modal hidden">
+      <div class="logs-modal-content">
+        <div class="logs-modal-header">
+          <h3>Session Logs</h3>
+          <div class="logs-modal-actions">
+            <button id="btn-copy-logs" class="btn btn-outline btn-small">Copy</button>
+            <button id="btn-close-logs" class="btn btn-outline btn-small">Close</button>
+          </div>
+        </div>
+        <pre id="logs-output" class="logs-output"></pre>
+      </div>
+    </div>
 
   </main>
 
@@ -193,6 +211,7 @@
   <div id="toast" class="toast hidden"></div>
 
   <!-- Scripts -->
+  <script src="js/logger.js"></script>
   <script src="js/data.js"></script>
   <script src="js/storage.js"></script>
   <script src="js/sheets.js"></script>
