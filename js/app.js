@@ -153,6 +153,7 @@ const App = {
   renderDayExercises(day) {
     const grouped = Storage.groupExercisesByMuscle(day.number);
     const { secondary } = Storage.getExercisesForDay(day.number);
+    const today = todayCST();
 
     const container = document.getElementById('day-exercises');
     let html = '';
@@ -171,8 +172,10 @@ const App = {
             ? `${lastSets[lastSets.length - 1].weight}lb x${lastSets[lastSets.length - 1].reps}`
             : '';
           const exLocs = (ex.locations || (ex.location ? [ex.location] : [])).join(', ');
+          const doneToday = Storage.getHistoryForExercise(ex.id)
+            .some(e => toDateCST(e.timestamp) === today);
           html += `
-            <div class="exercise-item" data-id="${ex.id}">
+            <div class="exercise-item${doneToday ? ' done-today' : ''}" data-id="${ex.id}">
               <div>
                 <div class="ex-name">${ex.name}</div>
                 <div class="ex-location">${exLocs}</div>

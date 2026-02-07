@@ -258,6 +258,11 @@ h3 { font-size: 16px; font-weight: 600; margin-bottom: 8px; color: var(--text-di
 
 .exercise-item:active { background: var(--bg-hover); }
 
+.exercise-item.done-today {
+  background: rgba(34, 197, 94, 0.1);
+  border-color: rgba(34, 197, 94, 0.3);
+}
+
 .exercise-item .ex-name { font-weight: 600; font-size: 15px; }
 .exercise-item .ex-location { font-size: 13px; color: var(--text-dim); }
 .exercise-item .ex-last {
