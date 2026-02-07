@@ -68,6 +68,16 @@ const Sheets = {
   // ─── Push all local data → overwrite Sheets ──────────────────
   async pushToSheets() {
     const data = Storage.exportAll();
+
+    // Ensure every exercise has both locations (array) and location (pipe-joined string).
+    // The deployed GAS may use either column name, so we send both.
+    if (data.exercises) {
+      data.exercises = data.exercises.map(ex => {
+        const locs = ex.locations || (ex.location ? [ex.location] : []);
+        return { ...ex, locations: locs, location: locs.join('|') };
+      });
+    }
+
     const exCount = data.exercises ? data.exercises.length : 0;
     const logCount = data.workoutLog ? data.workoutLog.length : 0;
     console.log(`[Sheets] pushToSheets: sending ${exCount} exercises, ${logCount} log entries`);

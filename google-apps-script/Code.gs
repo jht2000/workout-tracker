@@ -85,13 +85,18 @@ function readExercises() {
   if (data.length <= 1) return [];
 
   const headers = data[0];
+  // Columns that store pipe-separated arrays (handle both 'location' and 'locations')
+  const arrayColumns = new Set(['primaryMuscles', 'secondaryMuscles', 'locations', 'location']);
+
   return data.slice(1).map(row => {
     const obj = {};
     headers.forEach((h, i) => {
-      if (h === 'primaryMuscles' || h === 'secondaryMuscles' || h === 'locations') {
-        obj[h] = row[i] ? row[i].split('|').filter(Boolean) : [];
+      if (arrayColumns.has(h)) {
+        // Normalize singular 'location' → 'locations' for consistency
+        const key = h === 'location' ? 'locations' : h;
+        obj[key] = row[i] ? String(row[i]).split('|').filter(Boolean) : [];
       } else {
-        obj[h] = row[i] || '';
+        obj[h] = row[i] !== undefined && row[i] !== null ? String(row[i]) : '';
       }
     });
     return obj;
