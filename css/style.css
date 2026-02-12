@@ -272,6 +272,12 @@ h3 { font-size: 16px; font-weight: 600; margin-bottom: 8px; color: var(--text-di
   white-space: nowrap;
 }
 
+.exercise-item .ex-last-date {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
 .match-badge {
   display: inline-block;
   padding: 2px 8px;

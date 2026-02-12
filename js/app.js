@@ -171,6 +171,9 @@ const App = {
           const lastInfo = lastSets.length > 0
             ? `${lastSets[lastSets.length - 1].weight}lb x${lastSets[lastSets.length - 1].reps}`
             : '';
+          const lastDate = lastSets.length > 0
+            ? formatDateCST(toDateCST(lastSets[0].timestamp))
+            : '';
           const exLocs = (ex.locations || (ex.location ? [ex.location] : [])).join(', ');
           const doneToday = Storage.getHistoryForExercise(ex.id)
             .some(e => toDateCST(e.timestamp) === today);
@@ -180,7 +183,7 @@ const App = {
                 <div class="ex-name">${ex.name}</div>
                 <div class="ex-location">${exLocs}</div>
               </div>
-              <div class="ex-last">${lastInfo}</div>
+              <div class="ex-last">${lastInfo}${lastDate ? `<div class="ex-last-date">${lastDate}</div>` : ''}</div>
             </div>`;
         });
       }
