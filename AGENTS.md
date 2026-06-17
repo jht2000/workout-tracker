@@ -83,7 +83,7 @@ The service worker uses **network-first** strategy everywhere. Cache is only an 
 ## Deployment
 - Push to `main` → GitHub Pages auto-deploys in ~60 seconds
 - User may need to hard-refresh or close/reopen tab after deploy
-- The `.claude/settings.local.json` is committed (not sensitive)
+- The `.Codex/settings.local.json` is committed (not sensitive)
 
 ## Lessons Learned
 - Service worker caching caused the most debugging pain. Always bump CACHE_NAME with changes.

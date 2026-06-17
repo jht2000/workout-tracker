@@ -74,7 +74,7 @@ workout-tracker/
 ├── css/
 │   └── style.css           # Dark mode, mobile-first styles
 ├── js/
-│   ├── data.js             # Muscle groups and 5-day split definitions
+│   ├── data.js             # Muscle groups and 4-day split definitions
 │   ├── storage.js          # LocalStorage CRUD layer
 │   ├── sheets.js           # Google Sheets sync client
 │   └── app.js              # Main app logic, UI rendering, navigation

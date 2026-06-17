@@ -27,7 +27,16 @@ const Storage = {
 
   // ─── Active Day ──────────────────────────────────────────────
   getActiveDay() {
-    return this._get(this.KEYS.ACTIVE_DAY) || null;
+    const storedDay = this._get(this.KEYS.ACTIVE_DAY);
+    const activeDay = Number(storedDay) || null;
+    if (!activeDay) return null;
+
+    const isValidDay = DAYS.some(day => day.number === activeDay);
+    if (isValidDay) return activeDay;
+
+    const fallbackDay = DAYS[0]?.number || null;
+    if (fallbackDay) this.setActiveDay(fallbackDay);
+    return fallbackDay;
   },
 
   setActiveDay(dayNumber) {

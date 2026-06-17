@@ -1,5 +1,5 @@
 // ─── App Version ─────────────────────────────────────────────────
-const APP_VERSION = '1.4.2';
+const APP_VERSION = '1.4.3';
 
 // ─── Muscle Groups ───────────────────────────────────────────────
 const MUSCLE_GROUPS = [
@@ -10,22 +10,24 @@ const MUSCLE_GROUPS = [
   'Lower Back', 'Glutes', 'Hamstrings', 'Calves'
 ];
 
-// ─── 5-Day Split ─────────────────────────────────────────────────
+// ─── 4-Day Split ─────────────────────────────────────────────────
 const DAYS = [
   {
     number: 1,
-    theme: 'Push + Quad-Dominant',
+    theme: 'Push + Quad + Core/Calves',
     muscles: [
       'Chest', 'Front Deltoids', 'Triceps', 'Side Deltoids',
-      'Quadriceps', 'Hip Adductors', 'Abdominals', 'Rotator Cuff'
+      'Quadriceps', 'Hip Adductors', 'Abdominals', 'Rotator Cuff',
+      'Calves', 'Obliques'
     ]
   },
   {
     number: 2,
-    theme: 'Pull + Hip-Dominant',
+    theme: 'Pull + Hip + Grip/Spinal Erectors',
     muscles: [
       'Upper Back', 'Middle Back', 'Biceps', 'Rear Deltoids',
-      'Hamstrings', 'Glutes', 'Hip Abductors', 'Traps'
+      'Hamstrings', 'Glutes', 'Hip Abductors', 'Traps',
+      'Lower Back', 'Forearms'
     ]
   },
   {
@@ -38,18 +40,11 @@ const DAYS = [
   },
   {
     number: 4,
-    theme: 'Pull + Quad-Dominant',
+    theme: 'Pull + Quad + Posterior Chain Accessories',
     muscles: [
       'Upper Back', 'Middle Back', 'Biceps', 'Rear Deltoids',
-      'Quadriceps', 'Hip Adductors', 'Abdominals', 'Rotator Cuff'
-    ]
-  },
-  {
-    number: 5,
-    theme: 'Hip-Dominant + Accessories',
-    muscles: [
-      'Hamstrings', 'Glutes', 'Hip Abductors', 'Traps',
-      'Lower Back', 'Calves', 'Forearms', 'Obliques'
+      'Quadriceps', 'Hip Adductors', 'Abdominals', 'Rotator Cuff',
+      'Hamstrings', 'Glutes', 'Hip Abductors', 'Traps'
     ]
   }
 ];
